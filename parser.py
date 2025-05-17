@@ -36,15 +36,15 @@ def p_statement_print(p):
     '''statement : PRINT LPAREN expr RPAREN NEWLINE'''
     p[0] = ('print', p[3])
 
-# Rule for handling 'if' statement
+#  if 
 def p_statement_if(p):
     '''statement : IF expr COLON NEWLINE block'''
-    p[0] = ('if', p[2], p[5])  # Simple if statement
+    p[0] = ('if', p[2], p[5])
 
-# Rule for handling 'if-else' statement
+#  if-else 
 def p_statement_if_else(p):
     '''statement : IF expr COLON NEWLINE block ELSE COLON NEWLINE block'''
-    p[0] = ('if_else', p[2], p[5], p[9])  # if-else statement
+    p[0] = ('if_else', p[2], p[5], p[9]) 
 
 def p_statement_for(p):
     '''statement : FOR ID IN RANGE LPAREN expr RPAREN COLON NEWLINE block'''

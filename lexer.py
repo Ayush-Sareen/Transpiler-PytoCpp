@@ -67,7 +67,7 @@ def t_NEWLINE(t):
     t.lexer.lineno += len(t.value)
     return t
 
-# Rule for handling comments (ignore everything after #)
+# Rule for handling comments 
 def t_COMMENT(t):
     r'\#.*'
     pass  # Ignore comments

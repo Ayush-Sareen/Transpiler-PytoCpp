@@ -1,8 +1,7 @@
 y=20
-for x in range(6):
-  print(x)
+
 if(y==20):
-  z=10
-  print("yuppp")  
+  for x in range(6):
+    print(x)
 else:
   print("double yupp")  
