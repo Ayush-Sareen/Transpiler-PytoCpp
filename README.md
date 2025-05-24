@@ -38,28 +38,7 @@ Usage:
    g++ output.cpp -o output
    ./output
 
-Example:
-Input (sample.py):
-x = 10
-if x > 5:
-    print("x is greater than 5")
-else:
-    print("x is less or equal to 5")
 
-Output (output.cpp):
-#include <iostream>
-#include <string>
-using namespace std;
-
-int main() {
-    int x = 10;
-    if (x > 5) {
-        cout << "x is greater than 5" << endl;
-    } else {
-        cout << "x is less or equal to 5" << endl;
-    }
-    return 0;
-}
 
 Notes:
 - Only basic Python features are supported
