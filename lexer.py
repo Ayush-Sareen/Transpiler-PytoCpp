@@ -17,7 +17,7 @@ tokens = (
     'PLUS', 'MINUS', 'TIMES', 'DIVIDE',
     'LPAREN', 'RPAREN', 'EQEQ', 'NEQ', 'AND', 'OR',
     'GT', 'LT', 'COLON', 'NEWLINE', 'STRING',
-    'GEQ', 'LEQ', 'COMMA'
+    'GEQ', 'LEQ', 'COMMA','LBRACE', 'RBRACE'
 ) + tuple(reserved.values())
 
 # Token rules for operators and symbols
@@ -37,13 +37,15 @@ t_EQEQ = r'=='
 t_NEQ = r'!='
 t_GEQ = r'>='
 t_LEQ = r'<='
+t_LBRACE = r'\{'
+t_RBRACE = r'\}'
 
 # Rule for strings
 def t_STRING(t):
     r'\".*?\"|\'.*?\''
     return t
 
-# Rule for identifiers (variables and reserved keywords)
+# Rule for identifiers
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
     t.type = reserved.get(t.value, 'ID')  # Check for reserved words
@@ -65,7 +67,6 @@ def t_NUMBER(t):
 def t_NEWLINE(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-    return t
 
 # Rule for handling comments 
 def t_COMMENT(t):

@@ -1,5 +1,5 @@
 import ply.yacc as yacc
-from lexer import tokens
+from lexer import tokens  
 
 precedence = (
     ('left', 'PLUS', 'MINUS'),
@@ -21,34 +21,32 @@ def p_statement_list(p):
         p[0] = p[1] + [p[2]]
 
 def p_block(p):
-    '''block : statement
-             | statement_list'''
-    if isinstance(p[1], list):
-        p[0] = p[1]
+    '''block : LBRACE statement_list RBRACE
+             | LBRACE RBRACE'''
+    if len(p) == 4:
+        p[0] = p[2]
     else:
-        p[0] = [p[1]]
+        p[0] = []
 
 def p_statement_assign(p):
-    '''statement : ID EQUALS expr NEWLINE'''
+    '''statement : ID EQUALS expr'''
     p[0] = ('assign', p[1], p[3])
 
 def p_statement_print(p):
-    '''statement : PRINT LPAREN expr RPAREN NEWLINE'''
+    '''statement : PRINT LPAREN expr RPAREN'''
     p[0] = ('print', p[3])
 
-#  if 
 def p_statement_if(p):
-    '''statement : IF expr COLON NEWLINE block'''
-    p[0] = ('if', p[2], p[5])
+    '''statement : IF expr COLON block'''
+    p[0] = ('if', p[2], p[4])
 
-#  if-else 
 def p_statement_if_else(p):
-    '''statement : IF expr COLON NEWLINE block ELSE COLON NEWLINE block'''
-    p[0] = ('if_else', p[2], p[5], p[9]) 
+    '''statement : IF expr COLON block ELSE COLON block'''
+    p[0] = ('if_else', p[2], p[4], p[7])
 
 def p_statement_for(p):
-    '''statement : FOR ID IN RANGE LPAREN expr RPAREN COLON NEWLINE block'''
-    p[0] = ('for_range', p[2], p[6], p[10])  # ('for_range', var, range_expr, block)
+    '''statement : FOR ID IN RANGE LPAREN expr RPAREN COLON block'''
+    p[0] = ('for_range', p[2], p[6], p[9])
 
 # Comparison operators
 def p_expr_comparison(p):
@@ -88,7 +86,8 @@ def p_expr_id(p):
 
 def p_expr_string(p):
     '''expr : STRING'''
-    p[0] = ('string', p[1][1:-1].encode().decode('unicode_escape'))  # Handle escape sequences in strings
+    # Handle escape sequences in strings
+    p[0] = ('string', p[1][1:-1].encode().decode('unicode_escape'))
 
 def p_expr_true(p):
     '''expr : TRUE'''
@@ -98,12 +97,10 @@ def p_expr_false(p):
     '''expr : FALSE'''
     p[0] = ('boolean', False)
 
-# Parentheses handling
 def p_expr_parens(p):
     '''expr : LPAREN expr RPAREN'''
     p[0] = p[2]
 
-# Comma handling for expressions
 def p_expr_comma(p):
     '''expr : expr COMMA expr'''
     p[0] = ('comma', p[1], p[3])

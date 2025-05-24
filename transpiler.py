@@ -30,4 +30,4 @@ cpp_code = generate_cpp(ast)
 with open("output.cpp", "w") as out:
     out.write(cpp_code)
 
-print("\nC++ code written to output.cpp")
+print("\nC++ code written on output.cpp")

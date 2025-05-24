@@ -1,6 +1,7 @@
 def generate_cpp(ast):
     lines = ["#include <iostream>", "#include <string>", "using namespace std;"]
     main_lines = []
+    declared_vars = set()
 
     def get_type(node):
         if node[0] == 'float':
@@ -19,8 +20,12 @@ def generate_cpp(ast):
         if node[0] == 'assign':
             var_name = node[1]
             value = gen(node[2])
-            value_type = get_type(node[2])
-            target.append(f"{value_type} {var_name} = {value};")
+            if var_name not in declared_vars:
+                value_type = get_type(node[2])
+                target.append(f"{value_type} {var_name} = {value};")
+                declared_vars.add(var_name)
+            else:
+                target.append(f"{var_name} = {value};")
 
         elif node[0] == 'print':
             expr_type = get_type(node[1])
@@ -61,16 +66,16 @@ def generate_cpp(ast):
         elif node[0] == 'if': 
             target.append(f"if ({gen(node[1])}) {{")
             for stmt in node[2]: 
-                gen(stmt, in_main)
+                gen(stmt)
             target.append("}")
 
         elif node[0] == 'if_else':  
             target.append(f"if ({gen(node[1])}) {{")
-            for stmt in node[2]:  # Inside if block
-                gen(stmt, in_main)
+            for stmt in node[2]:  
+                gen(stmt)
             target.append("} else {")
-            for stmt in node[3]:  # Inside else block
-                gen(stmt, in_main)
+            for stmt in node[3]:  
+                gen(stmt)
             target.append("}")
 
         elif node[0] == 'for_range':
@@ -78,8 +83,8 @@ def generate_cpp(ast):
             start = 0 
             end = gen(node[2])
             target.append(f"for (int {var} = {start}; {var} < {end}; {var}++) {{")
-            for stmt in node[3]:  # This is the list of statements inside the loop body
-                gen(stmt, in_main)
+            for stmt in node[3]:  
+                gen(stmt)
             target.append("}")
 
     # Process the AST and generate the code

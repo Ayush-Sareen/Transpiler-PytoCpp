@@ -4,11 +4,9 @@ using namespace std;
 int main() {
 int y = 20;
 if (y == 20) {
-for (int x = 0; x < 6; x++) {
-cout << x << endl;
+y = 10;
+cout << y << endl;
 }
-} else {
-cout << "double yupp" << endl;
-}
+cout << y << endl;
 return 0;
 }

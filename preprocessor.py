@@ -7,14 +7,14 @@ def preprocess_code(code: str) -> str:
     indent_stack = [0]
 
     for line in lines:
-        stripped = line.lstrip('\n')
-        if not stripped.strip():
-            continue
+        if not line.strip():
+            continue  # skip empty lines
 
+        stripped = line.lstrip(' \t')  # FIXED: remove leading spaces/tabs
         indent = len(line) - len(stripped)
 
         if indent > indent_stack[-1]:
-            result.append('{' + stripped)
+            result.append('{' + '\n' + stripped)
             indent_stack.append(indent)
         elif indent < indent_stack[-1]:
             while indent < indent_stack[-1]:
@@ -24,6 +24,7 @@ def preprocess_code(code: str) -> str:
         else:
             result.append(stripped)
 
+    # Close remaining open blocks
     while len(indent_stack) > 1:
         result.append('}')
         indent_stack.pop()
